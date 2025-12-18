@@ -46,6 +46,8 @@
     --node-path: 38 92% 50%;
     --node-start: 160 84% 50%;
     --node-end: 350 80% 55%;
+    /* Added Weighted node color variable */
+    --node-weight: 271 76% 53%; 
 
     /* Glow effects */
     --glow-primary: 160 84% 39%;
@@ -66,32 +68,23 @@
   .dark {
     --background: 222 47% 3%;
     --foreground: 210 40% 98%;
-
     --card: 222 47% 5%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222 47% 6%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 160 84% 39%;
     --primary-foreground: 222 47% 3%;
-
     --secondary: 222 30% 12%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 222 30% 15%;
     --muted-foreground: 215 20% 55%;
-
     --accent: 38 92% 50%;
     --accent-foreground: 222 47% 3%;
-
     --destructive: 0 70% 50%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 222 30% 15%;
     --input: 222 30% 15%;
     --ring: 160 84% 39%;
-
     --sidebar-background: 222 47% 4%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 160 84% 39%;
@@ -125,6 +118,19 @@
     @apply relative bg-primary/20 backdrop-blur-md border border-primary/30 
            hover:bg-primary/30 hover:border-primary/50 transition-all duration-300
            shadow-lg shadow-primary/20 text-primary;
+  }
+
+  /* --- Weighted Node Styling --- */
+  .node-weight {
+    background-color: #6b21a8; /* Purple color */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+    animation: nodeWeight 0.3s ease-out forwards;
   }
 }
 
@@ -162,10 +168,12 @@
   }
 
   .node-visited-animation {
+    @apply relative z-10;
     animation: nodeVisited 0.5s ease-out forwards;
   }
 
   .node-path-animation {
+    @apply relative z-20;
     animation: nodePath 0.5s ease-out forwards;
   }
 
@@ -210,22 +218,18 @@
   }
 
   @keyframes nodeWall {
-    0% {
-      transform: scale(0.7);
-    }
-    100% {
-      transform: scale(1);
-      background-color: hsl(var(--node-wall));
-    }
+    0% { transform: scale(0.7); }
+    100% { transform: scale(1); background-color: hsl(var(--node-wall)); }
+  }
+
+  @keyframes nodeWeight {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
   }
 
   @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
-    }
-    50% {
-      box-shadow: 0 0 25px hsl(var(--primary) / 0.8);
-    }
+    0%, 100% { box-shadow: 0 0 10px hsl(var(--primary) / 0.5); }
+    50% { box-shadow: 0 0 25px hsl(var(--primary) / 0.8); }
   }
 
   .pulse-glow {
