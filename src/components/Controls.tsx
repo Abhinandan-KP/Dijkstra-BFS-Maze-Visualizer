@@ -11,6 +11,8 @@ import { Slider } from '@/components/ui/slider';
 
 interface ControlsProps {
   algorithm: string;
+  graphType: "weighted" | "unweighted" | null;
+  setGraphType: (v: "weighted" | "unweighted") => void;
   onAlgorithmChange: (value: string) => void;
   onVisualize: () => void;
   onClear: () => void;
