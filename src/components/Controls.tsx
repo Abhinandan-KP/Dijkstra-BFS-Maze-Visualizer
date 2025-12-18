@@ -1,4 +1,4 @@
-import { Play, Trash2, Grid3X3, RotateCcw } from 'lucide-react';
+import { Play, Trash2, Grid3X3, RotateCcw, Gauge } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -33,16 +33,16 @@ const Controls = ({
   onSpeedChange,
 }: ControlsProps) => {
   return (
-    <div className="bg-card border-b border-border px-6 py-4">
+    <div className="bg-card/50 backdrop-blur-md border-b border-border/50 px-6 py-4">
       <div className="flex flex-wrap items-center gap-4">
         {/* Algorithm Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Algorithm:</span>
+          <span className="text-sm text-muted-foreground font-medium">Algorithm:</span>
           <Select value={algorithm} onValueChange={onAlgorithmChange} disabled={isRunning}>
-            <SelectTrigger className="w-48 bg-secondary border-border">
+            <SelectTrigger className="w-48 btn-glass border-border/50">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-card/95 backdrop-blur-md border-border/50">
               <SelectItem value="dijkstra">Dijkstra's Algorithm</SelectItem>
               <SelectItem value="bfs">Breadth-First Search</SelectItem>
             </SelectContent>
@@ -50,7 +50,8 @@ const Controls = ({
         </div>
 
         {/* Speed Control */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 btn-glass rounded-lg px-4 py-2">
+          <Gauge className="w-4 h-4 text-primary" />
           <span className="text-sm text-muted-foreground">Speed:</span>
           <Slider
             value={[speed]}
@@ -59,30 +60,28 @@ const Controls = ({
             max={100}
             step={1}
             className="w-32"
-            disabled={isRunning}
           />
-          <span className="text-xs text-muted-foreground w-8">{speed}%</span>
+          <span className="text-xs font-mono text-primary w-10">{speed}%</span>
         </div>
 
         {/* Divider */}
-        <div className="h-8 w-px bg-border" />
+        <div className="h-8 w-px bg-border/50" />
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
           <Button
             onClick={onVisualize}
             disabled={isRunning}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
+            className="btn-glass-primary gap-2 font-semibold"
           >
             <Play className="w-4 h-4" />
-            Visualize
+            Execute Search
           </Button>
 
           <Button
             onClick={onGenerateMaze}
             disabled={isRunning}
-            variant="outline"
-            className="gap-2 border-border hover:bg-secondary"
+            className="btn-glass gap-2"
           >
             <Grid3X3 className="w-4 h-4" />
             Generate Maze
@@ -91,18 +90,16 @@ const Controls = ({
           <Button
             onClick={onReset}
             disabled={isRunning}
-            variant="outline"
-            className="gap-2 border-border hover:bg-secondary"
+            className="btn-glass gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            Reset Path
+            Clear Trace
           </Button>
 
           <Button
             onClick={onClear}
             disabled={isRunning}
-            variant="outline"
-            className="gap-2 border-border hover:bg-secondary text-destructive hover:text-destructive"
+            className="btn-glass gap-2 text-destructive hover:text-destructive"
           >
             <Trash2 className="w-4 h-4" />
             Clear Grid
@@ -111,7 +108,7 @@ const Controls = ({
 
         {/* Instructions */}
         <div className="ml-auto text-sm text-muted-foreground hidden lg:block">
-          <span className="text-foreground font-medium">Tip:</span> Click & drag to draw walls.
+          <span className="text-primary font-medium">Tip:</span> Click & drag to draw walls.
           Drag start/end markers to move them.
         </div>
       </div>

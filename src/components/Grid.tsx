@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import GridNode from './GridNode';
 import { NodeType, createNode, resetNode } from '@/types/Node';
 import { dijkstra, getNodesInShortestPathOrder } from '@/algorithms/dijkstra';
 import { bfs, getNodesInShortestPathOrder as bfsGetPath } from '@/algorithms/bfs';
-import { generateRandomMaze } from '@/algorithms/maze';
+import { generateRecursiveBacktrackerMaze } from '@/algorithms/maze';
 
 const GRID_ROWS = 20;
 const GRID_COLS = 40;
@@ -40,6 +40,14 @@ const Grid = ({
   const [movingNode, setMovingNode] = useState<'start' | 'end' | null>(null);
   const [startPos, setStartPos] = useState(DEFAULT_START);
   const [endPos, setEndPos] = useState(DEFAULT_END);
+  
+  // Use ref to track speed changes in real-time during animation
+  const speedRef = useRef(speed);
+  
+  // Update ref when speed prop changes
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   // Initialize grid
   const initializeGrid = useCallback(() => {
@@ -108,10 +116,10 @@ const Grid = ({
     }
   }, [triggerReset]);
 
-  // Handle maze trigger
+  // Handle maze trigger - now using recursive backtracker
   useEffect(() => {
     if (triggerMaze && !isRunning) {
-      const newGrid = generateRandomMaze(grid, startPos, endPos);
+      const newGrid = generateRecursiveBacktrackerMaze(GRID_ROWS, GRID_COLS, startPos, endPos);
       setGrid(newGrid);
       onStats(0, 0);
       onActionComplete();
@@ -231,45 +239,50 @@ const Grid = ({
       nodesInShortestPathOrder = bfsGetPath(endNode);
     }
 
-    const animationSpeed = Math.max(1, 101 - speed);
-
-    await animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder, animationSpeed);
+    await animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder);
 
     onStats(visitedNodesInOrder.length, nodesInShortestPathOrder.length);
     setIsRunning(false);
   };
 
+  // Animation function that reads speed from ref for real-time updates
   const animateAlgorithm = async (
     visitedNodesInOrder: NodeType[],
-    nodesInShortestPathOrder: NodeType[],
-    speed: number
+    nodesInShortestPathOrder: NodeType[]
   ) => {
+    // Helper to get current delay based on speed ref
+    const getDelay = () => Math.max(1, 101 - speedRef.current);
+
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
-      await new Promise((resolve) => setTimeout(resolve, speed));
+      await new Promise((resolve) => setTimeout(resolve, getDelay()));
       const node = visitedNodesInOrder[i];
       const element = document.getElementById(`node-${node.row}-${node.col}`);
       if (element && !node.isStart && !node.isEnd) {
         element.classList.add('node-visited-animation');
       }
+      // Update stats live during animation
+      onStats(i + 1, 0);
     }
 
-    await new Promise((resolve) => setTimeout(resolve, speed * 5));
+    await new Promise((resolve) => setTimeout(resolve, getDelay() * 5));
 
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
-      await new Promise((resolve) => setTimeout(resolve, speed * 3));
+      await new Promise((resolve) => setTimeout(resolve, getDelay() * 3));
       const node = nodesInShortestPathOrder[i];
       const element = document.getElementById(`node-${node.row}-${node.col}`);
       if (element && !node.isStart && !node.isEnd) {
         element.classList.remove('node-visited-animation');
         element.classList.add('node-path-animation');
       }
+      // Update path length live during animation
+      onStats(visitedNodesInOrder.length, i + 1);
     }
   };
 
   return (
     <div className="flex-1 flex items-center justify-center p-6 overflow-auto">
       <div
-        className="grid gap-0 bg-background/50 rounded-lg p-4 shadow-2xl"
+        className="grid gap-0 bg-card/30 backdrop-blur-sm rounded-xl p-4 shadow-2xl border border-border/30"
         style={{
           gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))`,
         }}
