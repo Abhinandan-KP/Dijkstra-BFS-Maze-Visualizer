@@ -1,73 +1,75 @@
-# Welcome to your Lovable project
+Dijkstra & BFS Maze Visualizer
+Project Info
+This repository contains a web-based tool designed to visualize how pathfinding algorithms work in real-time. Built with React and TypeScript, this project helps students and developers understand the step-by-step execution of Dijkstra’s Algorithm and Breadth-First Search (BFS) within a customizable maze environment.
 
-## Project info
+How to Edit and Run This Project
+You can work on this project locally using your own system and IDE.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Prerequisites
+Make sure you have the following installed:
 
-## How can I edit this code?
+Node.js (v18 or higher)
 
-There are several ways of editing your application.
+npm (comes with Node.js)
 
-**Use Lovable**
+Steps to Run Locally
+Bash
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+# Step 1: Clone the repository
+git clone https://github.com/yourusername/dijkstra-bfs-visualizer.git
 
-Changes made via Lovable will be committed automatically to this repo.
+# Step 2: Go to the project folder
+cd dijkstra-bfs-visualizer
 
-**Use your preferred IDE**
+# Step 3: Install dependencies
+npm install
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
-```
+After running the above commands, the project will start on http://localhost:5173 (standard Vite port), and you can view it in your browser.
 
-**Edit a file directly in GitHub**
+Editing the Code
+You can edit the project in multiple ways:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Using Your IDE (Recommended): Open the project folder in VS Code, make changes to the logic in src/algorithms/, and save to see instant updates via Hot Module Replacement.
 
-**Use GitHub Codespaces**
+Using GitHub Codespaces: Click the Code button on the GitHub repo, select Codespaces, and create a new environment to edit directly in your browser.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Technologies Used
+This project is built using a modern tech stack:
 
-## What technologies are used for this project?
+React – For building the interactive grid UI.
 
-This project is built with:
+TypeScript – To ensure type safety in algorithm logic.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Vite – For a lightning-fast development environment.
 
-## How can I deploy this project?
+Tailwind CSS – For styling the maze components and buttons.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+shadcn/ui – For high-quality, accessible UI components like sliders and dropdowns.
 
-## Can I connect a custom domain to my Lovable project?
+Key Features
+Interactive Grid: Click and drag to draw walls/obstacles.
 
-Yes, you can!
+Algorithm Selection: Choose between Dijkstra (weighted) and BFS (unweighted).
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Speed Control: Adjust the visualization speed to see the "frontier" expansion clearly.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Responsive Design: Works on desktops and tablets.
+
+Deployment
+To host this project online:
+
+Build the project:
+
+Bash
+
+npm run build
+Upload the dist folder to Vercel, Netlify, or GitHub Pages.
+
+Purpose of This Project
+Visualize data structures and algorithms (DSA) in a GUI format.
+
+Practice implementing graph traversal logic in TypeScript.
+
+Understand the difference between greedy search (Dijkstra) and level-order traversal (BFS).
