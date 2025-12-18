@@ -12,7 +12,7 @@ const DEFAULT_END = { row: 10, col: 35 };
 
 interface GridProps {
   algorithm: string;
-  graphType: "weighted" | "unweighted" | null; // Added this line
+  graphType: "weighted" | "unweighted" | null;
   speed: number;
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
@@ -26,7 +26,7 @@ interface GridProps {
 
 const Grid = ({
   algorithm,
-  graphType, // Added this line
+  graphType,
   speed,
   isRunning,
   setIsRunning,
@@ -43,15 +43,12 @@ const Grid = ({
   const [startPos, setStartPos] = useState(DEFAULT_START);
   const [endPos, setEndPos] = useState(DEFAULT_END);
   
-  // Use ref to track speed changes in real-time during animation
   const speedRef = useRef(speed);
   
-  // Update ref when speed prop changes
   useEffect(() => {
     speedRef.current = speed;
   }, [speed]);
 
-  // Initialize grid
   const initializeGrid = useCallback(() => {
     const newGrid: NodeType[][] = [];
     for (let row = 0; row < GRID_ROWS; row++) {
@@ -76,7 +73,6 @@ const Grid = ({
     initializeGrid();
   }, []);
 
-  // Handle visualize trigger
   useEffect(() => {
     if (triggerVisualize && !isRunning) {
       visualize();
@@ -84,7 +80,6 @@ const Grid = ({
     }
   }, [triggerVisualize]);
 
-  // Handle clear trigger
   useEffect(() => {
     if (triggerClear && !isRunning) {
       setStartPos(DEFAULT_START);
@@ -110,7 +105,6 @@ const Grid = ({
     }
   }, [triggerClear, onStats, onActionComplete, isRunning]);
 
-  // Handle reset trigger
   useEffect(() => {
     if (triggerReset && !isRunning) {
       resetGrid();
@@ -118,7 +112,6 @@ const Grid = ({
     }
   }, [triggerReset]);
 
-  // Handle maze trigger - now using recursive backtracker
   useEffect(() => {
     if (triggerMaze && !isRunning) {
       const newGrid = generateRecursiveBacktrackerMaze(GRID_ROWS, GRID_COLS, startPos, endPos);
@@ -137,7 +130,8 @@ const Grid = ({
             .replace('node-visited-animation', '')
             .replace('node-path-animation', '');
         }
-        return resetNode(node);
+        // Preserve the weight property when resetting the visual trace
+        return { ...resetNode(node), isWeight: node.isWeight, weight: node.weight };
       })
     );
     setGrid(newGrid);
@@ -210,7 +204,7 @@ const Grid = ({
     const newGrid = grid.map((r) =>
       r.map((node) => {
         if (node.row === row && node.col === col) {
-          return { ...node, isWall: !node.isWall };
+          return { ...node, isWall: !node.isWall, isWeight: false };
         }
         return node;
       })
@@ -222,10 +216,23 @@ const Grid = ({
     resetGrid();
     setIsRunning(true);
 
-    // Create a fresh grid for the algorithm
+    // Create a fresh grid and apply random weights if in Weighted mode
     const newGrid = grid.map((row) =>
-      row.map((node) => resetNode(node))
+      row.map((node) => {
+        const newNode = { ...resetNode(node), isWeight: false, weight: 1 };
+        // If user picked weighted, randomly assign weights to 20% of nodes
+        if (graphType === "weighted" && !newNode.isStart && !newNode.isEnd && !newNode.isWall) {
+          if (Math.random() < 0.2) {
+            newNode.isWeight = true;
+            newNode.weight = Math.floor(Math.random() * 4) + 2; // Weight value 2, 3, 4, or 5
+          }
+        }
+        return newNode;
+      })
     );
+
+    // Update state so viewer sees the weights
+    setGrid(newGrid);
 
     const startNode = newGrid[startPos.row][startPos.col];
     const endNode = newGrid[endPos.row][endPos.col];
@@ -233,13 +240,11 @@ const Grid = ({
     let visitedNodesInOrder: NodeType[];
     let nodesInShortestPathOrder: NodeType[];
 
-    // logic for Dijkstra vs BFS based on selection
     if (algorithm === 'dijkstra') {
       if (graphType === "weighted") {
         visitedNodesInOrder = dijkstra(newGrid, startNode, endNode);
         nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
       } else {
-        // Unweighted Dijkstra uses BFS logic
         visitedNodesInOrder = bfs(newGrid, startNode, endNode);
         nodesInShortestPathOrder = bfsGetPath(endNode);
       }
@@ -254,12 +259,10 @@ const Grid = ({
     setIsRunning(false);
   };
 
-  // Animation function that reads speed from ref for real-time updates
   const animateAlgorithm = async (
     visitedNodesInOrder: NodeType[],
     nodesInShortestPathOrder: NodeType[]
   ) => {
-    // Helper to get current delay based on speed ref
     const getDelay = () => Math.max(1, 101 - speedRef.current);
 
     for (let i = 0; i < visitedNodesInOrder.length; i++) {
@@ -269,7 +272,6 @@ const Grid = ({
       if (element && !node.isStart && !node.isEnd) {
         element.classList.add('node-visited-animation');
       }
-      // Update stats live during animation
       onStats(i + 1, 0);
     }
 
@@ -283,7 +285,6 @@ const Grid = ({
         element.classList.remove('node-visited-animation');
         element.classList.add('node-path-animation');
       }
-      // Update path length live during animation
       onStats(visitedNodesInOrder.length, i + 1);
     }
   };
