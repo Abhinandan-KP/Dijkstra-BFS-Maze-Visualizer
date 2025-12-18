@@ -5,6 +5,8 @@ import Controls from '@/components/Controls';
 
 const Index = () => {
   const [algorithm, setAlgorithm] = useState('dijkstra');
+  // ADDED: State to track if the graph is weighted or unweighted
+  const [graphType, setGraphType] = useState<"weighted" | "unweighted" | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [speed, setSpeed] = useState(50);
   const [visitedCount, setVisitedCount] = useState(0);
@@ -28,6 +30,15 @@ const Index = () => {
     setTriggerMaze(false);
   }, []);
 
+  // ADDED: Logic to check if user can visualize
+  const handleVisualizeClick = () => {
+    if (algorithm === "dijkstra" && !graphType) {
+      alert("Please select Weighted or Unweighted first!");
+      return;
+    }
+    setTriggerVisualize(true);
+  };
+
   return (
     <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
@@ -41,24 +52,32 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Controls */}
-       <Controls
-  algorithm={algorithm}
-  graphType={graphType}
-  setGraphType={setGraphType}
-  onAlgorithmChange={(algo) => {
-    setAlgorithm(algo);
-    // BFS is always unweighted, so we set it automatically
-    if (algo === "bfs") {
-      setGraphType("unweighted");
-    } else {
-      setGraphType(null); // Force user to choose for Dijkstra
-    }
-  }}
-/>
+        <Controls
+          algorithm={algorithm}
+          graphType={graphType} // Passing the state down
+          setGraphType={setGraphType} // Passing the setter down
+          onAlgorithmChange={(algo) => {
+            setAlgorithm(algo);
+            // BFS is always unweighted, so we set it automatically
+            if (algo === "bfs") {
+              setGraphType("unweighted");
+            } else {
+              setGraphType(null); // Force user to choose for Dijkstra
+            }
+          }}
+          onVisualize={handleVisualizeClick} // Using our check function
+          onClear={() => setTriggerClear(true)}
+          onReset={() => setTriggerReset(true)}
+          onGenerateMaze={() => setTriggerMaze(true)}
+          isRunning={isRunning}
+          speed={speed}
+          onSpeedChange={(val) => setSpeed(val[0])}
+        />
 
         {/* Grid */}
         <Grid
           algorithm={algorithm}
+          graphType={graphType} // Pass this to Grid so it knows how to run Dijkstra
           speed={speed}
           isRunning={isRunning}
           setIsRunning={setIsRunning}
