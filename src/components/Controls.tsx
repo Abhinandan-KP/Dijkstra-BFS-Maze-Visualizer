@@ -25,6 +25,8 @@ interface ControlsProps {
 
 const Controls = ({
   algorithm,
+  graphType, // Added this
+  setGraphType, // Added this
   onAlgorithmChange,
   onVisualize,
   onClear,
@@ -49,6 +51,30 @@ const Controls = ({
               <SelectItem value="bfs">Breadth-First Search</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* ADDED: Weighted/Unweighted Toggle for Dijkstra */}
+          {algorithm === "dijkstra" && (
+            <div className="flex gap-1 ml-2 bg-secondary/30 p-1 rounded-md border border-border/50">
+              <Button
+                variant={graphType === "weighted" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setGraphType("weighted")}
+                className={`h-7 px-3 text-xs ${graphType === "weighted" ? "bg-primary shadow-lg" : ""}`}
+                disabled={isRunning}
+              >
+                Weighted
+              </Button>
+              <Button
+                variant={graphType === "unweighted" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setGraphType("unweighted")}
+                className={`h-7 px-3 text-xs ${graphType === "unweighted" ? "bg-primary shadow-lg" : ""}`}
+                disabled={isRunning}
+              >
+                Unweighted
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Speed Control */}
