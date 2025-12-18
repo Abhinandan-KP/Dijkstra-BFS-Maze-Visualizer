@@ -12,6 +12,7 @@ const DEFAULT_END = { row: 10, col: 35 };
 
 interface GridProps {
   algorithm: string;
+  graphType: "weighted" | "unweighted" | null; // Added this line
   speed: number;
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
@@ -25,6 +26,7 @@ interface GridProps {
 
 const Grid = ({
   algorithm,
+  graphType, // Added this line
   speed,
   isRunning,
   setIsRunning,
@@ -231,9 +233,16 @@ const Grid = ({
     let visitedNodesInOrder: NodeType[];
     let nodesInShortestPathOrder: NodeType[];
 
+    // logic for Dijkstra vs BFS based on selection
     if (algorithm === 'dijkstra') {
-      visitedNodesInOrder = dijkstra(newGrid, startNode, endNode);
-      nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
+      if (graphType === "weighted") {
+        visitedNodesInOrder = dijkstra(newGrid, startNode, endNode);
+        nodesInShortestPathOrder = getNodesInShortestPathOrder(endNode);
+      } else {
+        // Unweighted Dijkstra uses BFS logic
+        visitedNodesInOrder = bfs(newGrid, startNode, endNode);
+        nodesInShortestPathOrder = bfsGetPath(endNode);
+      }
     } else {
       visitedNodesInOrder = bfs(newGrid, startNode, endNode);
       nodesInShortestPathOrder = bfsGetPath(endNode);
