@@ -1,11 +1,71 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useCallback } from 'react';
+import Grid from '@/components/Grid';
+import Sidebar from '@/components/Sidebar';
+import Controls from '@/components/Controls';
 
 const Index = () => {
+  const [algorithm, setAlgorithm] = useState('dijkstra');
+  const [isRunning, setIsRunning] = useState(false);
+  const [speed, setSpeed] = useState(50);
+  const [visitedCount, setVisitedCount] = useState(0);
+  const [pathLength, setPathLength] = useState(0);
+
+  // Trigger states
+  const [triggerVisualize, setTriggerVisualize] = useState(false);
+  const [triggerClear, setTriggerClear] = useState(false);
+  const [triggerReset, setTriggerReset] = useState(false);
+  const [triggerMaze, setTriggerMaze] = useState(false);
+
+  const handleStats = useCallback((visited: number, path: number) => {
+    setVisitedCount(visited);
+    setPathLength(path);
+  }, []);
+
+  const handleActionComplete = useCallback(() => {
+    setTriggerVisualize(false);
+    setTriggerClear(false);
+    setTriggerReset(false);
+    setTriggerMaze(false);
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen flex bg-background">
+      {/* Sidebar */}
+      <Sidebar
+        currentAlgorithm={algorithm}
+        isRunning={isRunning}
+        visitedCount={visitedCount}
+        pathLength={pathLength}
+      />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Controls */}
+        <Controls
+          algorithm={algorithm}
+          onAlgorithmChange={setAlgorithm}
+          onVisualize={() => setTriggerVisualize(true)}
+          onClear={() => setTriggerClear(true)}
+          onReset={() => setTriggerReset(true)}
+          onGenerateMaze={() => setTriggerMaze(true)}
+          isRunning={isRunning}
+          speed={speed}
+          onSpeedChange={(value) => setSpeed(value[0])}
+        />
+
+        {/* Grid */}
+        <Grid
+          algorithm={algorithm}
+          speed={speed}
+          isRunning={isRunning}
+          setIsRunning={setIsRunning}
+          onStats={handleStats}
+          triggerVisualize={triggerVisualize}
+          triggerClear={triggerClear}
+          triggerReset={triggerReset}
+          triggerMaze={triggerMaze}
+          onActionComplete={handleActionComplete}
+        />
       </div>
     </div>
   );
