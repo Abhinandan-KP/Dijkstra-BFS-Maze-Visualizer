@@ -41,17 +41,20 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Controls */}
-        <Controls
-          algorithm={algorithm}
-          onAlgorithmChange={setAlgorithm}
-          onVisualize={() => setTriggerVisualize(true)}
-          onClear={() => setTriggerClear(true)}
-          onReset={() => setTriggerReset(true)}
-          onGenerateMaze={() => setTriggerMaze(true)}
-          isRunning={isRunning}
-          speed={speed}
-          onSpeedChange={(value) => setSpeed(value[0])}
-        />
+       <Controls
+  algorithm={algorithm}
+  graphType={graphType}
+  setGraphType={setGraphType}
+  onAlgorithmChange={(algo) => {
+    setAlgorithm(algo);
+    // BFS is always unweighted, so we set it automatically
+    if (algo === "bfs") {
+      setGraphType("unweighted");
+    } else {
+      setGraphType(null); // Force user to choose for Dijkstra
+    }
+  }}
+/>
 
         {/* Grid */}
         <Grid
