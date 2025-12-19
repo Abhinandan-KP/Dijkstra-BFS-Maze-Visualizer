@@ -1,75 +1,66 @@
-Dijkstra & BFS Maze Visualizer
-Project Info
-This repository contains a web-based tool designed to visualize how pathfinding algorithms work in real-time. Built with React and TypeScript, this project helps students and developers understand the step-by-step execution of Dijkstra’s Algorithm and Breadth-First Search (BFS) within a customizable maze environment.
+🚀 Dijkstra & BFS Maze Visualizer
 
-How to Edit and Run This Project
-You can work on this project locally using your own system and IDE.
+A high-performance web tool designed to demystify how pathfinding algorithms navigate complex environments. Built with React and TypeScript, it provides a real-time, step-by-step visualization of Dijkstra’s Algorithm and Breadth-First Search (BFS).
 
-Prerequisites
-Make sure you have the following installed:
+Whether you are a student mastering Data Structures & Algorithms (DSA) or a developer exploring graph traversal logic, this visualizer offers an interactive way to observe how the frontier expands and how the shortest path is discovered.
 
-Node.js (v18 or higher)
+✨ Key Features
 
-npm (comes with Node.js)
+Interactive Maze Creator
+Click and drag directly on the grid to draw walls and obstacles in real time.
 
-Steps to Run Locally
-Bash
+Algorithm Toggle
+Seamlessly switch between Dijkstra (weighted pathfinding) and BFS (unweighted level-order traversal).
 
-# Step 1: Clone the repository
-git clone https://github.com/yourusername/dijkstra-bfs-visualizer.git
+Dynamic Speed Control
+Adjust visualization speed to analyze each node expansion or instantly view the final path.
 
-# Step 2: Go to the project folder
+Responsive UI
+Optimized for desktops and tablets using Tailwind CSS and shadcn/ui.
+
+🛠️ Built With
+
+React + Vite — Lightning-fast development environment and reactive UI
+
+TypeScript — Type-safe, robust implementations of complex algorithms
+
+Tailwind CSS — Utility-first styling for a clean, modern interface
+
+shadcn/ui — Accessible, high-quality UI components
+
+🚀 Quick Start
+
+Follow these steps to run the visualizer locally:
+
+1️⃣ Clone the repository
+git clone https://github.com/Abhinandan-KP/dijkstra-bfs-visualizer.git
+
+2️⃣ Install dependencies
 cd dijkstra-bfs-visualizer
-
-# Step 3: Install dependencies
 npm install
 
-# Step 4: Start the development server
+3️⃣ Start the development server
 npm run dev
-After running the above commands, the project will start on http://localhost:5173 (standard Vite port), and you can view it in your browser.
 
-Editing the Code
-You can edit the project in multiple ways:
 
-Using Your IDE (Recommended): Open the project folder in VS Code, make changes to the logic in src/algorithms/, and save to see instant updates via Hot Module Replacement.
+➡️ The app will be live at: http://localhost:5173
 
-Using GitHub Codespaces: Click the Code button on the GitHub repo, select Codespaces, and create a new environment to edit directly in your browser.
+📂 Project Structure
+src/
+├── algorithms/   # Core logic for Dijkstra and BFS
+├── components/   # Grid, nodes, controls, and UI elements
+├── hooks/        # Custom hooks for grid state & animations
 
-Technologies Used
-This project is built using a modern tech stack:
+💡 Purpose of the Project
 
-React – For building the interactive grid UI.
+This project bridges the gap between theoretical graph algorithms and visual execution, helping users understand:
 
-TypeScript – To ensure type safety in algorithm logic.
+The difference between Greedy Search (Dijkstra) and Level-Order Traversal (BFS)
 
-Vite – For a lightning-fast development environment.
+How obstacles and weights affect shortest-path calculations
 
-Tailwind CSS – For styling the maze components and buttons.
+How to implement graph algorithms cleanly in a modern TypeScript + React codebase
 
-shadcn/ui – For high-quality, accessible UI components like sliders and dropdowns.
+👤 Author
 
-Key Features
-Interactive Grid: Click and drag to draw walls/obstacles.
-
-Algorithm Selection: Choose between Dijkstra (weighted) and BFS (unweighted).
-
-Speed Control: Adjust the visualization speed to see the "frontier" expansion clearly.
-
-Responsive Design: Works on desktops and tablets.
-
-Deployment
-To host this project online:
-
-Build the project:
-
-Bash
-
-npm run build
-Upload the dist folder to Vercel, Netlify, or GitHub Pages.
-
-Purpose of This Project
-Visualize data structures and algorithms (DSA) in a GUI format.
-
-Practice implementing graph traversal logic in TypeScript.
-
-Understand the difference between greedy search (Dijkstra) and level-order traversal (BFS).
+Handcrafted by Abhinandan
